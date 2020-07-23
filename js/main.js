@@ -67,7 +67,6 @@ for (var i = 0; i < COUNTER; i++) {
   pinsFragment.appendChild(createPin());
 }
 
-mapPins.appendChild(pinsFragment);
 
 for (var k = 0; k < fieldsetAll.length; k++) {
   fieldsetAll[k].disabled = true;
@@ -80,6 +79,7 @@ mapPinMain.onclick = function () {
 
 mapPinMain.addEventListener('click', function () {
   activatesSite();
+  mapPins.appendChild(pinsFragment);
 });
 
 

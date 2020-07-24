@@ -1,5 +1,8 @@
 'use strict';
 var COUNTER = 8;
+var MIN_TITLE_LENGTH = 30;
+var MAX_TITLE_LENGTH = 100;
+var titleForm = document.querySelector('#title');
 var types = {
   palace: 'Дворец',
   flat: 'Квартира',
@@ -71,11 +74,20 @@ for (var i = 0; i < COUNTER; i++) {
 for (var k = 0; k < fieldsetAll.length; k++) {
   fieldsetAll[k].disabled = true;
 }
-/*
-mapPinMain.onclick = function () {
-  activatesSite();
-};*/
 
+var activatesSite = function () {
+  classRemove();
+  mapPinAdress();
+  for (var l = 0; l < fieldsetAll.length; l++) {
+    fieldsetAll[l].disabled = false;
+  }
+};
+
+var mapPinAdress = function () {
+  var offer = generateOffer();
+  var address = document.querySelector('#address');
+  address.setAttribute('value', offer.location.x + ', ' + offer.location.y);
+};
 
 mapPinMain.addEventListener('click', function () {
   activatesSite();
@@ -94,20 +106,6 @@ var classRemove = function () {
   map.classList.remove('map--faded');
   var adForm = document.querySelector('.ad-form');
   adForm.classList.remove('ad-form--disabled');
-};
-
-var mapPinAdress = function () {
-  var offer = generateOffer();
-  var address = document.querySelector('#address');
-  address.setAttribute('value', offer.location.x + ', ' + offer.location.y);
-};
-
-var activatesSite = function () {
-  classRemove();
-  mapPinAdress();
-  for (var l = 0; l < fieldsetAll.length; l++) {
-    fieldsetAll[l].disabled = false;
-  }
 };
 
 var roomsNumber = document.querySelector('#room_number');
@@ -132,3 +130,15 @@ var handlerValidateRoomsQuests = function () {
 
 roomsNumber.addEventListener('change', handlerValidateRoomsQuests);
 guestsNumber.addEventListener('change', handlerValidateRoomsQuests);
+
+titleForm.addEventListener('input', function () {
+  var valueLength = titleForm.value.length;
+
+  if (valueLength < MIN_TITLE_LENGTH) {
+    titleForm.setCustomValidity('Ещё ' + (MIN_TITLE_LENGTH - valueLength) +' симв.');
+  } else if (valueLength > MAX_TITLE_LENGTH) {
+    titleForm.setCustomValidity('Удалите лишние ' + (valueLength - MAX_TITLE_LENGTH) +' симв.');
+  } else {
+    titleForm.setCustomValidity('');
+  }
+});

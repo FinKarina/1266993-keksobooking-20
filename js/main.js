@@ -2,6 +2,7 @@
 var COUNTER = 8;
 var MIN_TITLE_LENGTH = 30;
 var MAX_TITLE_LENGTH = 100;
+var MAX_PRICE = 1000000;
 var titleForm = document.querySelector('#title');
 var types = {
   palace: 'Дворец',
@@ -19,6 +20,9 @@ var PIN_WIDTH = 50;
 var PIN_HEIGHT = 70;
 var mapPinMain = document.querySelector('.map__pin--main');
 var fieldsetAll = document.querySelectorAll('fieldset');
+var pricePerNight = {
+
+};
 
 function randomInteger(min, max) {
   var rand = min - 0.5 + Math.random() * (max - min + 1);
@@ -140,5 +144,32 @@ titleForm.addEventListener('input', function () {
     titleForm.setCustomValidity('Удалите лишние ' + (valueLength - MAX_TITLE_LENGTH) +' симв.');
   } else {
     titleForm.setCustomValidity('');
+  }
+});
+
+titleForm.addEventListener('invalid', function () {
+  if (titleForm.validity.valueMissing) {
+    titleForm.setCustomValidity('Обязательное поле');
+  } else {
+    titleForm.setCustomValidity('');
+  }
+});
+
+var pricePerNight = document.querySelector('#price');
+pricePerNight.addEventListener('input', function () {
+  var valuePriceLength = pricePerNight.value;
+
+  if (valuePriceLength > MAX_PRICE) {
+    pricePerNight.setCustomValidity('Максимальная цена — 1 000 000');
+  } else {
+    pricePerNight.setCustomValidity('');
+  }
+});
+
+pricePerNight.addEventListener('invalid', function () {
+  if (pricePerNight.validity.valueMissing) {
+    pricePerNight.setCustomValidity('Обязательное поле');
+  } else {
+    pricePerNight.setCustomValidity('');
   }
 });

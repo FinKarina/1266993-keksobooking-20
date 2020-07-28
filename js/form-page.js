@@ -28,6 +28,7 @@ window.formPage = (function () {
     100: '100 комнат — не для гостей'
   };
 
+  var titleElement = document.querySelector('#title');
   var timeInElement = document.querySelector('#timein');
   var timeOutElement = document.querySelector('#timeout');
   var roomNumberElement = document.querySelector('#room_number');
@@ -44,21 +45,55 @@ window.formPage = (function () {
   }
 
   function checkRoomsToGuests(evt) {
-    if (evt.target.id === 'room_number') {
-      countRoom = parseInt(evt.target.value, 10);
+    var element = evt.target;
+    if (element.id === 'room_number') {
+      countRoom = parseInt(element.value, 10);
     } else {
-      countGuest = parseInt(evt.target.value, 10);
+      countGuest = parseInt(element.value, 10);
     }
     if (countGuest > countRoom || countRoom === 100 && countGuest !== 0 || countRoom !== 100 && countGuest === 0) {
       capacityElement.setCustomValidity(wrongMessage[countRoom]);
+      capacityElement.classList.add('error-form');
     } else {
       capacityElement.setCustomValidity('');
+      capacityElement.classList.remove('error-form');
     }
   }
 
   function onTypeElementInput(evt) {
-    priceElement.setAttribute('min', minPriceForHouse[evt.target.value]);
-    priceElement.setAttribute('placeholder', minPriceForHouse[evt.target.value]);
+    var element = evt.target;
+    priceElement.setAttribute('min', minPriceForHouse[element.value]);
+    priceElement.setAttribute('placeholder', minPriceForHouse[element.value]);
+    if (Number(priceElement.value) < Number(priceElement.getAttribute('min'))) {
+      priceElement.classList.add('error-form');
+    } else {
+      priceElement.classList.remove('error-form');
+    }
+  }
+
+  function onPriceElementInput() {
+    if (Number(priceElement.value) < Number(priceElement.getAttribute('min'))) {
+      priceElement.classList.add('error-form');
+    } else {
+      priceElement.classList.remove('error-form');
+    }
+  }
+
+  function resetStyleValidate() {
+    titleElement.classList.remove('error-form');
+    roomNumberElement.classList.remove('error-form');
+    capacityElement.classList.remove('error-form');
+    typeElement.classList.remove('error-form');
+    priceElement.classList.remove('error-form');
+  }
+
+  function onTitleInput(evt) {
+    var element = evt.target;
+    if (Number(element.value.length) < Number(element.getAttribute('minlength'))) {
+      element.classList.add('error-form');
+    } else {
+      element.classList.remove('error-form');
+    }
   }
 
   function onTimeInElementInput(evt) {
@@ -163,12 +198,14 @@ window.formPage = (function () {
 
   function onAdFormResetElementClick(evt) {
     evt.preventDefault();
+    resetStyleValidate();
     window.main.switchToNoActiveModePage();
   }
 
   function onAdFormResetElementKeyDown(evtKey) {
     if (evtKey === 'Enter') {
       evtKey.preventDefault();
+      resetStyleValidate();
       window.main.switchToNoActiveModePage();
     }
   }
@@ -197,9 +234,11 @@ window.formPage = (function () {
       adFormResetElement.removeEventListener('click', onAdFormResetElementClick);
       adFormResetElement.removeEventListener('keydown', onAdFormResetElementKeyDown);
 
+      titleElement.removeEventListener('input', onTitleInput);
       timeInElement.removeEventListener('input', onTimeInElementInput);
       timeOutElement.removeEventListener('input', onTimeOutElementInput);
       typeElement.removeEventListener('input', onTypeElementInput);
+      priceElement.removeEventListener('input', onPriceElementInput);
       roomNumberElement.removeEventListener('input', onRoomNumberElementInput);
       capacityElement.removeEventListener('input', onCapacityElementInput);
     },
@@ -214,9 +253,11 @@ window.formPage = (function () {
 
       adFormElement.addEventListener('submit', onAdFormElementSumbit);
 
+      titleElement.addEventListener('input', onTitleInput);
       timeInElement.addEventListener('input', onTimeInElementInput);
       timeOutElement.addEventListener('input', onTimeOutElementInput);
       typeElement.addEventListener('input', onTypeElementInput);
+      priceElement.addEventListener('input', onPriceElementInput);
       roomNumberElement.addEventListener('input', onRoomNumberElementInput);
       capacityElement.addEventListener('input', onCapacityElementInput);
 

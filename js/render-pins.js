@@ -73,14 +73,11 @@ window.renderPins = (function () {
   }
 
   function openCard(evt, offer) {
-    var targetElement;
 
     if (evt.target.nodeName === 'BUTTON') {
       activeElement = evt.target;
-      targetElement = evt.target.querySelector('img');
     } else {
       activeElement = evt.target.parentNode;
-      targetElement = evt.target;
     }
 
     if (document.querySelector('.map__card')) {
